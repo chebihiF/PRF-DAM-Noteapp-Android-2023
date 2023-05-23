@@ -1,5 +1,6 @@
 package org.m2i.noteapp.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +55,8 @@ fun NoteScreen(
     var description by remember {
         mutableStateOf("")
     }
+
+    var context = LocalContext.current
 
     Column(modifier = Modifier.padding(6.dp)) {
         TopAppBar(title = {
@@ -90,14 +94,19 @@ fun NoteScreen(
             NoteButton(text = "Save", onClick = {
                 if(title.isNotEmpty() && description.isNotEmpty()){
                     // save and add to the list
-
+                    onAddNote(Note(title = title, description = description))
+                    title = ""
+                    description = ""
+                    Toast.makeText(context,"Note Added", Toast.LENGTH_SHORT).show()
                 }
             })
         }
         Divider(modifier = Modifier.padding(10.dp))
         LazyColumn{
             items(notes){ note ->
-                NoteRow(note = note, onNoteClicked = {})
+                NoteRow(note = note, onNoteClicked = {
+                    onRemoveNote(note)
+                })
             }
         }
 
@@ -113,7 +122,7 @@ fun NoteRow(
     Surface(
         modifier
             .padding(4.dp)
-            .clip(RoundedCornerShape(topEnd = 33.dp, bottomEnd = 33.dp))
+            .clip(RoundedCornerShape(topEnd = 33.dp, bottomStart = 33.dp))
             .fillMaxWidth(),
         color = colorResource(id = R.color.main_color),
         tonalElevation = 6.dp,
@@ -121,7 +130,7 @@ fun NoteRow(
     ) {
         Column(
             modifier
-                .clickable { }
+                .clickable { onNoteClicked(note) }
                 .padding(horizontal = 14.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.Start) {
 

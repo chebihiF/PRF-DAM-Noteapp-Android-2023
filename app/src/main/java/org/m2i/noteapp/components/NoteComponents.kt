@@ -4,6 +4,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -13,7 +14,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
+import org.m2i.noteapp.R
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -50,7 +53,12 @@ fun NoteButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 ){
-    Button(onClick = onClick, shape = CircleShape, enabled = enabled, modifier = modifier) {
+    Button(onClick = onClick, shape = CircleShape, enabled = enabled, modifier = modifier, 
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(id = R.color.second_color),
+            contentColor = colorResource(id = R.color.button_txt_color),
+
+        )) {
         Text(text = text)
     }
 }
